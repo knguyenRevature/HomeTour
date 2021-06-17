@@ -2,7 +2,6 @@ package game;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import fixtures.Interactable;
 import fixtures.Room;
 
@@ -35,33 +34,25 @@ public class RoomManager {
 		/*
 		 * Connecting rooms together
 		 */
+		backyard.addAdjacentRoom("South", kitchen);
+		bedroom.addAdjacentRoom("West", study);
 		courtyard.addAdjacentRoom("North", lobby);
-		
+		closet.addAdjacentRoom("West", lobby);
+		garage.addAdjacentRoom("North", kitchen);
+		kitchen.addAdjacentRoom("South", garage);
+		kitchen.addAdjacentRoom("North", backyard);
+		kitchen.addAdjacentRoom("East", lobby);
 		lobby.addAdjacentRoom("South", courtyard);
 		lobby.addAdjacentRoom("North", study);
 		lobby.addAdjacentRoom("East", closet);
 		lobby.addAdjacentRoom("West", kitchen);
-		
-		closet.addAdjacentRoom("West", lobby);
-		
-		kitchen.addAdjacentRoom("South", garage);
-		kitchen.addAdjacentRoom("North", backyard);
-		kitchen.addAdjacentRoom("East", lobby);
-		
-		garage.addAdjacentRoom("North", kitchen);
-		
-		backyard.addAdjacentRoom("South", kitchen);
-		
+		secret.addAdjacentRoom("South", study);
 		study.addAdjacentRoom("South", lobby);
 		study.addAdjacentRoom("North", secret);
 		study.addAdjacentRoom("East", bedroom);
 		
-		bedroom.addAdjacentRoom("West", study);
-		
-		secret.addAdjacentRoom("South", study);
-		
 		/*
-		 * Creating interactables
+		 * Creating interactables; Can be picked up
 		 */
 		Interactable key = new Interactable("Key", "A key to unlock the study", "Its covered in dust and is slightly rusted. ", true);
 		key.setInteractDescription("The " + key.getColorName() + " is just big enough to fit in the palm of my hand, yet it feels so heavy...");
@@ -69,30 +60,59 @@ public class RoomManager {
 		Interactable secretKey = new Interactable("Finger", "I've never seen anything like it", "The light from the ceiling makes it pretty noticable.", true);
 		secretKey.setInteractDescription("The " + secretKey.getColorName() + " comes out of the rubble in one piece. Pretty sturdy.");
 		secretKey.setUseDescription("You insert the " + secretKey.getColorName() + " into the stone door... There's a brief silence, followed by a loud snap.");
+		Interactable knife = new Interactable("Knife", "An old rusty kitchen knife", "It's stuck into the counter. Probably took a lot of force to do that...", true);
+		knife.setInteractDescription("The " + knife.getColorName() + " chips even more as I pull it out. Won't be much use in this state.");
 		
 		/*
-		 * Placing interactables
+		 * Creating interactables; Cannot be picked up
+		 */
+		Interactable fridge = new Interactable("Fridge", "", "The door seems to chained up pretty secure. There's no way I'm getting that open.", false);
+		fridge.setInteractDescription("It's no good, the door isn't going to budge.");
+		Interactable car = new Interactable("Car", "", "All the wheels are slashed, and the windshield is in pieces. Who would do such a thing?", false);
+		car.setInteractDescription("What an antique.");
+		Interactable toolbox = new Interactable("Toolbox", "", "It looks like it's open. Could there be anything useful inside?", false);
+		toolbox.setInteractDescription("Not a single tool in sight. Perhaps someone beat me to it?");
+		Interactable telephone = new Interactable("Telephone", "", "Haven't seen a model like this in years.", false);
+		telephone.setInteractDescription("The line is missing. Was it cut deliberately, or perhaps something else..?");
+		Interactable mirror = new Interactable("Mirror", "", "It's hanging crooked above a dresser.", false);
+		mirror.setInteractDescription("I see only myself in the mirror, yet I can't help but feel like something else is here too.");
+		Interactable hole = new Interactable("Hole", "", "It looks like it's wide enough to fit a person...", false);
+		hole.setInteractDescription("Yeah right, like I'm going down there.");
+		
+		/*
+		 * Placing baggable interactables
 		 */
 		closet.addInteractable(key);
 		garage.addInteractable(secretKey);
+		kitchen.addInteractable(knife);
+		
+		/*
+		 * Placing stationary interactables
+		 */
+		bedroom.addInteractable(mirror);
+		garage.addInteractable(car);
+		garage.addInteractable(toolbox);
+		kitchen.addInteractable(fridge);
+		lobby.addInteractable(telephone);
+		secret.addInteractable(hole);
 		
 		/*
 		 * Adding unlock conditions for locked rooms
 		 */
-		study.addUnlockCondition(key);
 		secret.addUnlockCondition(secretKey);
+		study.addUnlockCondition(key);
 		
 		/*
 		 * Adding rooms to List
 		 */
-		rooms.add(courtyard);
-		rooms.add(lobby);
-		rooms.add(kitchen);
-		rooms.add(garage);
 		rooms.add(backyard);
-		rooms.add(closet);
-		rooms.add(study);
 		rooms.add(bedroom);
+		rooms.add(closet);
+		rooms.add(courtyard);
+		rooms.add(garage);
+		rooms.add(kitchen);
+		rooms.add(lobby);
 		rooms.add(secret);
+		rooms.add(study);
 	}
 }

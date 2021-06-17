@@ -15,17 +15,22 @@ public class Main {
 	public static List<String> acceptableCommands = new ArrayList<String>();
 	
 	public static void main(String[] args) {
+		/*
+		 * Initializes key components
+		 */
 		RoomManager rm = new RoomManager();
 		Player player = new Player();
 		Scanner scanner = new Scanner(System.in);
-		
 		System.out.println("--- Welcome to HomeTour ---");
 		hint();
 		initAcceptableCommands();
 		rm.init();
-		player.setCurrentRoom(rm.rooms.get(0));
+		player.setCurrentRoom(rm.rooms.get(3));
 		boolean playing = true;
 		
+		/*
+		 * Main gameplay loop until player exits
+		 */
 		while (playing) {
 			printRoom(player);
 			String input = scanner.nextLine();
@@ -89,10 +94,10 @@ public class Main {
 		return commands;
 	}
 	
+	/*
+	 * Initializes acceptable commands
+	 */
 	public static void initAcceptableCommands() {
-		/*
-		 * Initializes acceptable commands
-		 */
 		acceptableCommands.add("help");
 		acceptableCommands.add("quit");
 		
@@ -102,10 +107,10 @@ public class Main {
 		acceptableCommands.add("bag");
 	}
 	
+	/*
+	 * Provides a reminder of acceptable commands to the player
+	 */
 	public static void hint() {
-		/*
-		 * Provides a reminder of acceptable commands to the player
-		 */
 		System.out.println("To navigate through the house use " + ANSI_YELLOW + "move <direction>." + ANSI_RESET);
 		System.out.println("To interact with objects use " + ANSI_YELLOW + "interact <object>." + ANSI_RESET);
 		System.out.println("To use something in your bag use " + ANSI_YELLOW + "use <object>." + ANSI_RESET);
@@ -120,10 +125,10 @@ public class Main {
 		System.out.println("\nInvalid Input. Too many/few arguments entered.");
 	}
 	
+	/*
+	 * Displays room information and the exit options
+	 */
 	public static void printRoom(Player player) {
-		/*
-		 * Displays room information and the exit options
-		 */
 		System.out.println("\n--- " + player.getCurrentRoom().getName() + " ---");
 		player.getCurrentRoom().displayLongDescription();
 		
@@ -135,10 +140,10 @@ public class Main {
 		}
 	}
 	
+	/*
+	 * Moves player to next room based on direction input
+	 */
 	public static void movePlayer(String direction, Player player) {
-		/*
-		 * Moves player to next room based on direction input
-		 */
 		boolean roomFound = false;
 		
 		for (Entry<String, Room> entry : player.getCurrentRoom().adjacentRooms.entrySet()) {
@@ -163,11 +168,11 @@ public class Main {
 		}
 	}
 	
+	/*
+	 * Player interacts with object based on object name
+	 * If object isBaggable, will be place in bag
+	 */
 	public static void interactObject(String object, Player player) {
-		/*
-		 * Player interacts with object based on object name
-		 * If object isBaggable, will be place in bag
-		 */
 		boolean objectFound = false;
 		
 		for (Interactable interaction : player.getCurrentRoom().interactables) {
@@ -189,10 +194,10 @@ public class Main {
 		}
 	}
 	
+	/*
+	 * Player uses object in bag to progress
+	 */
 	public static void useObject(String object, Player player) {
-		/*
-		 * Player uses object in bag to progress
-		 */
 		boolean objectFound = false;
 		boolean roomUnlocked = false;
 		

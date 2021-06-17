@@ -36,12 +36,15 @@ public class Room extends Fixture{
 	public boolean checkUnlockCondition(Interactable interactable) {
 		return (unlockCondition.equals(interactable));
 	}
+	
+	public void setIsLocked(boolean isLocked) {
+		this.isLocked = isLocked;
+	}
 
 	public void displayLongDescription() {
 		System.out.println(getLongDescription());
 		for (Interactable interactable : interactables) {
-			System.out.println("A " + interactable.getName() + " is visible. " + interactable.getLongDescription());
+			System.out.println("A " + interactable.getColorName() + " is visible. " + interactable.getLongDescription());
 		}
-		System.out.println();
 	}
 }

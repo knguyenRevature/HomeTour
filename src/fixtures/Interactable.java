@@ -10,7 +10,7 @@ public class Interactable extends Fixture {
 	public boolean isBaggable;
 	
 	public Interactable(String name, String shortDescription, String longDescription, boolean isBaggable) {
-		super(ANSI_GREEN + name + ANSI_RESET, shortDescription, longDescription);
+		super(name, shortDescription, longDescription);
 		this.isBaggable = isBaggable;
 	}
 	
@@ -20,5 +20,9 @@ public class Interactable extends Fixture {
 	
 	public void setUseDescription(String useDescription) {
 		this.useDescription = useDescription;
+	}
+	
+	public String getColorName() {
+		return ANSI_GREEN + this.getName() + ANSI_RESET;
 	}
 }

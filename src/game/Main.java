@@ -9,6 +9,9 @@ import fixtures.Room;
 
 public class Main {
 	
+	public static final String ANSI_RESET = "\u001B[0m";
+	public static final String ANSI_YELLOW = "\u001B[33m";
+	
 	public static List<String> acceptableCommands = new ArrayList<String>();
 	
 	public static void main(String[] args) {
@@ -56,10 +59,21 @@ public class Main {
 						}
 						break;
 					case "interact":
-						break;
-					case "pickup":
+						if (commands.length == 2) {
+							interactObject(commands[1], player);
+						} else {
+							invalidInput();
+						}
 						break;
 					case "use":
+						if (commands.length == 2) {
+							useObject(commands[1], player);
+						} else {
+							invalidInput();
+						}
+						break;
+					case "bag":
+						player.bagStatus();
 						break;
 				}
 			} else {
@@ -84,29 +98,32 @@ public class Main {
 		
 		acceptableCommands.add("move");
 		acceptableCommands.add("interact");
-		acceptableCommands.add("pickup");
 		acceptableCommands.add("use");
+		acceptableCommands.add("bag");
 	}
 	
 	public static void hint() {
 		/*
 		 * Provides a reminder of acceptable commands to the player
 		 */
-		System.out.println("To navigate through the house use 'move' <direction>.");
-		System.out.println("To interact with objects use 'interact' <object>.");
-		System.out.println("To add something to your bag use 'pickup' <object>.");
-		System.out.println("To use something in your bag use 'use' <object>.");
-		System.out.println("To exit HomeTour use 'quit'.");
+		System.out.println("To navigate through the house use " + ANSI_YELLOW + "move <direction>." + ANSI_RESET);
+		System.out.println("To interact with objects use " + ANSI_YELLOW + "interact <object>." + ANSI_RESET);
+		System.out.println("To use something in your bag use " + ANSI_YELLOW + "use <object>." + ANSI_RESET);
+		System.out.println("To check the status of your bag use " + ANSI_YELLOW + "bag." + ANSI_RESET);
+		System.out.println("To exit HomeTour use " + ANSI_YELLOW + "quit." + ANSI_RESET);
 	}
 	
 	public static void invalidInput() {
 		/*
 		 * Displays invalid input warning
 		 */
-		System.out.println("\nInvalid Input.");
+		System.out.println("\nInvalid Input. Too many/few arguments entered.");
 	}
 	
 	public static void printRoom(Player player) {
+		/*
+		 * Displays room information and the exit options
+		 */
 		System.out.println("\n--- " + player.getCurrentRoom().getName() + " ---");
 		player.getCurrentRoom().displayLongDescription();
 		
@@ -135,6 +152,7 @@ public class Main {
 					System.out.println("\nPlayer moves into " + room.getName());
 					player.setCurrentRoom(room);
 				}
+				
 				roomFound = true;
 				break;
 			}
@@ -145,7 +163,62 @@ public class Main {
 		}
 	}
 	
-	public static void interactObject() {
+	public static void interactObject(String object, Player player) {
+		/*
+		 * Player interacts with object based on object name
+		 * If object isBaggable, will be place in bag
+		 */
+		boolean objectFound = false;
 		
+		for (Interactable interaction : player.getCurrentRoom().interactables) {
+			if (interaction.getName().equalsIgnoreCase(object)) {
+				objectFound = true;
+				System.out.println("\n" + interaction.interactDescription);
+				
+				if (interaction.isBaggable) {
+					player.addToBag(interaction);
+					System.out.println("\n" + interaction.getColorName() + " was added to your bag.");
+				}
+				
+				break;
+			}
+		}
+		
+		if (!objectFound) {
+			System.out.println("\nInvalid interaction. No such object found.");
+		}
+	}
+	
+	public static void useObject(String object, Player player) {
+		/*
+		 * Player uses object in bag to progress
+		 */
+		boolean objectFound = false;
+		boolean roomUnlocked = false;
+		
+		for (Interactable interaction : player.bag) {
+			if (interaction.getName().equalsIgnoreCase(object)) {
+				objectFound = true;
+				
+				for (Room room : player.getCurrentRoom().adjacentRooms.values()) {
+					if (room.isLocked && room.checkUnlockCondition(interaction)) {
+						roomUnlocked = true;
+						room.setIsLocked(!roomUnlocked);
+						System.out.println("\n" + interaction.useDescription);
+						break;
+					}
+				}
+				
+				if (!roomUnlocked) {
+					System.out.println("\n" + interaction.getColorName() + " cannot be used here.");
+				}
+				
+				break;
+			}
+		}
+		
+		if (!objectFound) {
+			System.out.println("\nInvalid interaction. No such object found.");
+		}
 	}
 }

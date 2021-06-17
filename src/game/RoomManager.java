@@ -64,11 +64,11 @@ public class RoomManager {
 		 * Creating interactables
 		 */
 		Interactable key = new Interactable("Key", "A key to unlock the study", "Its covered in dust and is slightly rusted. ", true);
-		key.setInteractDescription("The " + key.getName() + " is just big enough to fit in the palm of my hand, yet it feels so heavy...");
-		key.setUseDescription("You insert the " + key.getName() + " into the door. The door clicks open, releasing a rush of air.");
+		key.setInteractDescription("The " + key.getColorName() + " is just big enough to fit in the palm of my hand, yet it feels so heavy...");
+		key.setUseDescription("You insert the " + key.getColorName() + " into the door. The door clicks open, releasing a rush of air.");
 		Interactable secretKey = new Interactable("Finger", "I've never seen anything like it", "The light from the ceiling makes it pretty noticable.", true);
-		secretKey.setInteractDescription("The " + secretKey.getName() + " comes out of the rubble in one piece. Pretty sturdy.");
-		secretKey.setUseDescription("You insert the " + secretKey.getName() + " into the stone door... There's a brief silence, followed by a loud snap.");
+		secretKey.setInteractDescription("The " + secretKey.getColorName() + " comes out of the rubble in one piece. Pretty sturdy.");
+		secretKey.setUseDescription("You insert the " + secretKey.getColorName() + " into the stone door... There's a brief silence, followed by a loud snap.");
 		
 		/*
 		 * Placing interactables

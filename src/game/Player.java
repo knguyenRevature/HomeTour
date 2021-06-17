@@ -32,14 +32,14 @@ public class Player {
 		}
 	}
 	
-	public void inventoryStatus() {
+	public void bagStatus() {
 		if (bag.isEmpty()) {
-			System.out.println("Your bag is empty.");
+			System.out.println("\nYour bag is empty.");
 		} else {
-			System.out.println("Your bag contains: ");
+			System.out.println("\nYour bag contains: ");
 			int index = 1;
 			for (Interactable interactable : bag) {
-				System.out.println(index + ". " + interactable.getName() + "; " + interactable.getShortDescription());
+				System.out.println(index + ". " + interactable.getColorName() + "; " + interactable.getShortDescription());
 				index++;
 			}
 		}

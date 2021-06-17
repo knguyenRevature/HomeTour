@@ -19,6 +19,7 @@ public class Player {
 		this.currentRoom = room;
 	}
 	
+	//Removes interactable from room, adds to player bag
 	public void addToBag(Interactable interactable) {
 		if (currentRoom.interactables.contains(interactable)) {
 			currentRoom.removeInteractable(interactable);
@@ -26,12 +27,14 @@ public class Player {
 		}
 	}
 	
+	//Removes interactable from player bag
 	public void removeFromBag(Interactable interactable) {
 		if (bag.contains(interactable)) {
 			bag.remove(interactable);
 		}
 	}
 	
+	//Displays the content of player's bag
 	public void bagStatus() {
 		if (bag.isEmpty()) {
 			System.out.println("\nYour bag is empty.");

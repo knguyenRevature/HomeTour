@@ -8,11 +8,10 @@ import fixtures.Room;
 public class RoomManager {
 	
 	public List<Room> rooms = new ArrayList<Room>();
+	public Room startingRoom;
 	
 	public void init() {
-		/*
-		 * Creating all rooms (9 total)
-		 */
+		//Creating all rooms (9 total)
 		Room courtyard = new Room("Courtyard", "An abandoned courtyard", "Dead leaves and broken tree branches litter every inch of this courtyard. "
 				+ "\nThe stairs leading up to the large oak doors are all crumbling, perhaps due to years of neglect. ", false);
 		Room lobby = new Room("Lobby", "A dusty lobby", "The lobby is covered in dust and cobwebs. There hasn't been any traffic in here for years. "
@@ -28,14 +27,16 @@ public class RoomManager {
 				+ "\nand most of the furniture is either flipped over or completely destroyed. ", true);
 		Room bedroom = new Room("Bedroom", "A decrepit bedroom", "A large, broken-down bed stands in the center of this bedroom. The windows are shattered, "
 				+ "\nand the walls bare strange markings. What could have possibly done this? ", false);
-		Room secret = new Room("Secret Exit", "An odd stone door", "There's a hole at the bottom of the floor. It's too dark to see down there completely, "
+		Room secret = new Room("?????", "An odd stone door", "There's a hole at the bottom of the floor. It's too dark to see down there completely, "
 				+ "\neven with a flashlight. Continuing forward may be dangerous... ", true);
+		Room cave = new Room("Cave", "A mysterious cave", "The air feels humid in here, and I can't see anything towards the back of the cave. "
+				+ "\nCould there be something hiding in the shadows...?", false);
 		
-		/*
-		 * Connecting rooms together
-		 */
+		//Connecting rooms together
 		backyard.addAdjacentRoom("South", kitchen);
+		backyard.addAdjacentRoom("West", cave);
 		bedroom.addAdjacentRoom("West", study);
+		cave.addAdjacentRoom("East", backyard);
 		courtyard.addAdjacentRoom("North", lobby);
 		closet.addAdjacentRoom("West", lobby);
 		garage.addAdjacentRoom("North", kitchen);
@@ -51,10 +52,8 @@ public class RoomManager {
 		study.addAdjacentRoom("North", secret);
 		study.addAdjacentRoom("East", bedroom);
 		
-		/*
-		 * Creating interactables; Can be picked up
-		 */
-		Interactable key = new Interactable("Key", "A key to unlock the study", "Its covered in dust and is slightly rusted. ", true);
+		//Creating interactables; Can be picked up
+		Interactable key = new Interactable("Key", "A hefty bronze key", "Its covered in dust and is slightly rusted. ", true);
 		key.setInteractDescription("The " + key.getColorName() + " is just big enough to fit in the palm of my hand, yet it feels so heavy...");
 		key.setUseDescription("You insert the " + key.getColorName() + " into the door. The door clicks open, releasing a rush of air.");
 		Interactable secretKey = new Interactable("Finger", "I've never seen anything like it", "The light from the ceiling makes it pretty noticable.", true);
@@ -62,10 +61,10 @@ public class RoomManager {
 		secretKey.setUseDescription("You insert the " + secretKey.getColorName() + " into the stone door... There's a brief silence, followed by a loud snap.");
 		Interactable knife = new Interactable("Knife", "An old rusty kitchen knife", "It's stuck into the counter. Probably took a lot of force to do that...", true);
 		knife.setInteractDescription("The " + knife.getColorName() + " chips even more as I pull it out. Won't be much use in this state.");
+		Interactable stone = new Interactable("Stone", "A strange stone", "This stone in particular stands out from the rest.", true);
+		stone.setInteractDescription("The " + stone.getColorName() + " feels strange to hold. It must be used for something...");
 		
-		/*
-		 * Creating interactables; Cannot be picked up
-		 */
+		//Creating interactables; Cannot be picked up
 		Interactable fridge = new Interactable("Fridge", "", "The door seems to chained up pretty secure. There's no way I'm getting that open.", false);
 		fridge.setInteractDescription("It's no good, the door isn't going to budge.");
 		Interactable car = new Interactable("Car", "", "All the wheels are slashed, and the windshield is in pieces. Who would do such a thing?", false);
@@ -78,35 +77,38 @@ public class RoomManager {
 		mirror.setInteractDescription("I see only myself in the mirror, yet I can't help but feel like something else is here too.");
 		Interactable hole = new Interactable("Hole", "", "It looks like it's wide enough to fit a person...", false);
 		hole.setInteractDescription("Yeah right, like I'm going down there.");
+		Interactable sign = new Interactable("Sign", "", "It's hard to read due to all the rust.", false);
+		sign.setInteractDescription("Upon closer inspection, the words \"PRIVATE PROPERTY\" can be made out.");
+		Interactable desk = new Interactable("Desk", "", "It's clearly the centerpiece of this room.", false);
+		desk.setInteractDescription("The woodwork was clearly done by a master craftsman. Too bad to see it reduced to this state...");
+		Interactable bone = new Interactable("Bone", "", "Not sure what that could belong to.", false);
+		bone.setInteractDescription("What ever it does belong to, it sure isn't from a person.");
 		
-		/*
-		 * Placing baggable interactables
-		 */
+		//Placing baggable interactables
+		backyard.addInteractable(stone);
 		closet.addInteractable(key);
 		garage.addInteractable(secretKey);
 		kitchen.addInteractable(knife);
 		
-		/*
-		 * Placing stationary interactables
-		 */
+		//Placing stationary interactables
 		bedroom.addInteractable(mirror);
+		cave.addInteractable(bone);
+		courtyard.addInteractable(sign);
 		garage.addInteractable(car);
 		garage.addInteractable(toolbox);
 		kitchen.addInteractable(fridge);
 		lobby.addInteractable(telephone);
 		secret.addInteractable(hole);
+		study.addInteractable(desk);
 		
-		/*
-		 * Adding unlock conditions for locked rooms
-		 */
+		//Adding unlock conditions for locked rooms
 		secret.addUnlockCondition(secretKey);
 		study.addUnlockCondition(key);
 		
-		/*
-		 * Adding rooms to List
-		 */
+		//Adding rooms to List
 		rooms.add(backyard);
 		rooms.add(bedroom);
+		rooms.add(cave);
 		rooms.add(closet);
 		rooms.add(courtyard);
 		rooms.add(garage);
@@ -114,5 +116,8 @@ public class RoomManager {
 		rooms.add(lobby);
 		rooms.add(secret);
 		rooms.add(study);
+		
+		//Set startingRoom
+		startingRoom = courtyard;
 	}
 }

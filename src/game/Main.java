@@ -10,27 +10,25 @@ import fixtures.Room;
 public class Main {
 	
 	public static final String ANSI_RESET = "\u001B[0m";
+	public static final String ANSI_RED = "\u001B[31m";
 	public static final String ANSI_YELLOW = "\u001B[33m";
 	
 	public static List<String> acceptableCommands = new ArrayList<String>();
 	
 	public static void main(String[] args) {
-		/*
-		 * Initializes key components
-		 */
+		//Initializes key components
 		RoomManager rm = new RoomManager();
 		Player player = new Player();
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("--- Welcome to HomeTour ---");
-		hint();
 		initAcceptableCommands();
 		rm.init();
-		player.setCurrentRoom(rm.rooms.get(3));
+		player.setCurrentRoom(rm.startingRoom);
 		boolean playing = true;
 		
-		/*
-		 * Main gameplay loop until player exits
-		 */
+		System.out.println("--- Welcome to HomeTour ---");
+		hint();
+		
+		//Main gameplay loop until player exits
 		while (playing) {
 			printRoom(player);
 			String input = scanner.nextLine();
@@ -78,11 +76,17 @@ public class Main {
 						}
 						break;
 					case "bag":
-						player.bagStatus();
+						if (commands.length == 1) {
+							player.bagStatus();
+						} else {
+							invalidInput();
+						}
 						break;
 				}
+			} else if (commands[0].equals("")) {
+				System.out.println(ANSI_RED + "\nNo command was entered." + ANSI_RESET + " Type 'help' for the rules again.");
 			} else {
-				System.out.println("\nNo such commands found. Type 'help' for the rules again.");
+				System.out.println(ANSI_RED + "\nNo such commands found." + ANSI_RESET + " Type 'help' for the rules again.");
 			}
 		}
 		
@@ -94,22 +98,17 @@ public class Main {
 		return commands;
 	}
 	
-	/*
-	 * Initializes acceptable commands
-	 */
+	//Initializes acceptable commands
 	public static void initAcceptableCommands() {
 		acceptableCommands.add("help");
 		acceptableCommands.add("quit");
-		
 		acceptableCommands.add("move");
 		acceptableCommands.add("interact");
 		acceptableCommands.add("use");
 		acceptableCommands.add("bag");
 	}
 	
-	/*
-	 * Provides a reminder of acceptable commands to the player
-	 */
+	//Provides a reminder of acceptable commands to the player
 	public static void hint() {
 		System.out.println("To navigate through the house use " + ANSI_YELLOW + "move <direction>." + ANSI_RESET);
 		System.out.println("To interact with objects use " + ANSI_YELLOW + "interact <object>." + ANSI_RESET);
@@ -119,15 +118,11 @@ public class Main {
 	}
 	
 	public static void invalidInput() {
-		/*
-		 * Displays invalid input warning
-		 */
-		System.out.println("\nInvalid Input. Too many/few arguments entered.");
+		//Displays invalid input warning
+		System.out.println(ANSI_RED + "\nInvalid Input." + ANSI_RESET + " Too many/few arguments entered.");
 	}
 	
-	/*
-	 * Displays room information and the exit options
-	 */
+	//Displays room information and the exit options
 	public static void printRoom(Player player) {
 		System.out.println("\n--- " + player.getCurrentRoom().getName() + " ---");
 		player.getCurrentRoom().displayLongDescription();
@@ -139,10 +134,8 @@ public class Main {
 			System.out.println(roomDirection + ": " + room.getShortDescription());
 		}
 	}
-	
-	/*
-	 * Moves player to next room based on direction input
-	 */
+
+	//Moves player to next room based on direction input
 	public static void movePlayer(String direction, Player player) {
 		boolean roomFound = false;
 		
@@ -154,7 +147,7 @@ public class Main {
 				if (room.isLocked) {
 					System.out.println("\nThe door to " + room.getName() + " is locked.");
 				} else {
-					System.out.println("\nPlayer moves into " + room.getName());
+					System.out.println("\nPlayer moves " + direction.toUpperCase() + " and enters " + room.getName().toUpperCase());
 					player.setCurrentRoom(room);
 				}
 				
@@ -164,14 +157,12 @@ public class Main {
 		}
 		
 		if (!roomFound) {
-			System.out.println("\nInvalid direction.");
+			System.out.println(ANSI_RED + "\nInvalid direction." + ANSI_RESET);
 		}
 	}
 	
-	/*
-	 * Player interacts with object based on object name
-	 * If object isBaggable, will be place in bag
-	 */
+	//Player interacts with object based on object name
+	//If object isBaggable, will be place in bag
 	public static void interactObject(String object, Player player) {
 		boolean objectFound = false;
 		
@@ -182,7 +173,7 @@ public class Main {
 				
 				if (interaction.isBaggable) {
 					player.addToBag(interaction);
-					System.out.println("\n" + interaction.getColorName() + " was added to your bag.");
+					System.out.println(interaction.getColorName() + " was added to your bag.");
 				}
 				
 				break;
@@ -190,13 +181,11 @@ public class Main {
 		}
 		
 		if (!objectFound) {
-			System.out.println("\nInvalid interaction. No such object found.");
+			System.out.println(ANSI_RED + "\nInvalid interaction." + ANSI_RESET + " No such object found in room.");
 		}
 	}
 	
-	/*
-	 * Player uses object in bag to progress
-	 */
+	//Player uses object in bag to progress
 	public static void useObject(String object, Player player) {
 		boolean objectFound = false;
 		boolean roomUnlocked = false;
@@ -223,7 +212,7 @@ public class Main {
 		}
 		
 		if (!objectFound) {
-			System.out.println("\nInvalid interaction. No such object found.");
+			System.out.println(ANSI_RED + "\nInvalid usage." + ANSI_RESET + " No such object found in bag.");
 		}
 	}
 }

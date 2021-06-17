@@ -41,6 +41,7 @@ public class Room extends Fixture{
 		this.isLocked = isLocked;
 	}
 
+	//Displays room longDescription + longDescription of each interactable in that room
 	public void displayLongDescription() {
 		System.out.println(getLongDescription());
 		for (Interactable interactable : interactables) {

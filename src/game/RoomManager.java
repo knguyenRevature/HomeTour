@@ -11,7 +11,7 @@ public class RoomManager {
 	public Room startingRoom;
 	
 	public void init() {
-		//Creating all rooms (9 total)
+		//Creating all rooms
 		Room courtyard = new Room("Courtyard", "An abandoned courtyard", "Dead leaves and broken tree branches litter every inch of this courtyard. "
 				+ "\nThe stairs leading up to the large oak doors are all crumbling, perhaps due to years of neglect. ", false);
 		Room lobby = new Room("Lobby", "A dusty lobby", "The lobby is covered in dust and cobwebs. There hasn't been any traffic in here for years. "

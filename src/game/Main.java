@@ -34,7 +34,7 @@ public class Main {
 			String input = scanner.nextLine();
 			String[] commands = collectInput(input);
 			
-			if (acceptableCommands.contains(commands[0])) {
+			if (commands.length > 0 && acceptableCommands.contains(commands[0])) {
 				int index = acceptableCommands.indexOf(commands[0]);
 				
 				switch(acceptableCommands.get(index)) {
@@ -83,7 +83,7 @@ public class Main {
 						}
 						break;
 				}
-			} else if (commands[0].equals("")) {
+			} else if (commands.length == 0 || commands[0].equals("")) {
 				System.out.println(ANSI_RED + "\nNo command was entered." + ANSI_RESET + " Type 'help' for the rules again.");
 			} else {
 				System.out.println(ANSI_RED + "\nNo such commands found." + ANSI_RESET + " Type 'help' for the rules again.");
